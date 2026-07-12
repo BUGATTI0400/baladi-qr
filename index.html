@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balady Service</title>
+</head>
+
+<body>
+    <script>
+        // ============================================================
+        //  THE ONLY THING YOU EDIT WHEN A DOMAIN CHANGES.
+        //  This page's own URL is what the QR codes encode, so it must
+        //  never change — but the domains below can change freely.
+        // ============================================================
+        const CONFIG = {
+            // Where the certificate app is currently hosted (the frontend):
+            FRONTEND_BASE: "https://services-balady-gov.vercel.app",
+            // Where the API is currently hosted (the backend):
+            BACKEND_BASE: "https://certificatesystembackend-production.up.railway.app"
+        };
+        // ============================================================
+
+        (function () {
+            // 1) Read the QR's query string:  ?id=<certId>&type=<certType>
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get("id");
+            const type = params.get("type") || "";
+
+            // 2) Normalize the configured domains (strip any trailing slash).
+            const frontend = CONFIG.FRONTEND_BASE.replace(/\/+$/, "");
+            const backend = CONFIG.BACKEND_BASE.replace(/\/+$/, "");
+
+            // 3) Guard: no id → nothing to open.
+            if (!id) {
+                document.getElementById("msg").textContent = "رابط غير صالح (لا يوجد معرّف شهادة).";
+                return;
+            }
+
+            // 4) Build the target: <frontend>/view/<id>?type=<type>&api=<backend>
+            const q = new URLSearchParams();
+            if (type) q.set("type", type);
+            q.set("api", backend); // hand the current backend to the app
+            const target = frontend + "/view/" + encodeURIComponent(id) + "?" + q.toString();
+
+            // 5) Manual fallback link in case auto-redirect is blocked.
+            document.getElementById("msg").innerHTML =
+                'إذا لم يتم تحويلك تلقائياً، <a href="' + target + '">اضغط هنا</a>.';
+
+            // 6) Redirect. `.replace()` so the redirector isn't left in history.
+            window.location.replace(target);
+        })();
+    </script>
+</body>
+
+</html>
