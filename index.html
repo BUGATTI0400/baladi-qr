@@ -33,8 +33,6 @@
     var CONFIG = {
       // Where the certificate app is currently hosted (the frontend):
       FRONTEND_BASE: "https://services-balady-gov.vercel.app/",
-      // Where the API is currently hosted (the backend):
-      BACKEND_BASE:  "https://certificatesystembackend-production.up.railway.app"
     };
     // ============================================================
 
@@ -51,9 +49,8 @@
       }
 
       var frontend = CONFIG.FRONTEND_BASE.replace(/\/+$/, "");
-      var backend  = CONFIG.BACKEND_BASE.replace(/\/+$/, "");
 
-      // Build the target: <frontend>/view/<id>?type=<type>&api=<backend>
+      // Build the target: <frontend>/view/<id>?type=<type>
       var q = new URLSearchParams();
       if (type) q.set("type", type);
       var target = frontend + "/view/" + encodeURIComponent(id) + "?" + q.toString();
