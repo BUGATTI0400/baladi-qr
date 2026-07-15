@@ -56,7 +56,6 @@
       // Build the target: <frontend>/view/<id>?type=<type>&api=<backend>
       var q = new URLSearchParams();
       if (type) q.set("type", type);
-      q.set("api", backend); // hand the current backend to the app
       var target = frontend + "/view/" + encodeURIComponent(id) + "?" + q.toString();
 
       // Manual fallback link (only if the element exists — must NOT block redirect).
